@@ -1,0 +1,25 @@
+# 服务器配置
+# 设置服务器的运行参数
+server:
+  port: 9090  # 服务器端口号设置为9090，用于监听客户端请求
+
+# Spring配置
+# Spring框架的核心配置，包含数据源、事务等关键设置
+spring:
+  # 数据源配置
+  # 定义数据库连接的相关参数，用于建立应用程序与数据库的连接
+  datasource:
+    # 数据库连接URL，连接到本地MySQL数据库的code2025数据库
+    # 参数说明：useSSL=false禁用SSL连接，serverTimezone=UTC设置时区为UTC
+    url: jdbc:mysql://localhost:3306/code2025?useSSL=false&serverTimezone=UTC
+    username: root  # 数据库用户名，用于验证身份
+    password: root  # 数据库密码，用于验证身份
+    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL驱动类名，指定数据库驱动实现类
+
+# MyBatis配置
+# MyBatis持久层框架的配置，用于定义SQL映射和数据库交互行为
+mybatis:
+  mapper-locations: classpath:mapper/*.xml  # mapper.xml文件位置，指定SQL映射文件路径# mapper.xml文件位置，指定SQL映射文件路径
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
