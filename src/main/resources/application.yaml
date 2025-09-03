@@ -11,7 +11,7 @@ spring:
   datasource:
     # 数据库连接URL，连接到本地MySQL数据库的code2025数据库
     # 参数说明：useSSL=false禁用SSL连接，serverTimezone=UTC设置时区为UTC
-    url: jdbc:mysql://localhost:3306/code2025?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/code1025?useSSL=false&serverTimezone=UTC
     username: root  # 数据库用户名，用于验证身份
     password: root  # 数据库密码，用于验证身份
     driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL驱动类名，指定数据库驱动实现类
