@@ -17,7 +17,9 @@ import java.util.Objects;
 @RestController
 public class WebController {
     //http://localhost:9090/
-    @Resource
-    AdminService adminService;
+    @GetMapping("/")
+    public Result index(){
+        return Result.success("欢迎来到SpringBoot");
+    }
 
 }

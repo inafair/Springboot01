@@ -20,6 +20,7 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
     // 注入AdminService服务
+    //http://localhost:9090/
     @Resource
     private AdminService adminService;
 
