@@ -19,17 +19,5 @@ public class WebController {
     //http://localhost:9090/
     @Resource
     AdminService adminService;
-    @GetMapping("/hello")
-    public Result hello() {
-        HashMap<Object, Object> map = new HashMap<>();
-        map.put("name", "张三");
-        return Result.success(map);
-    }
 
-
-    @GetMapping("/admin")
-    public Result admin(String name) {
-        String admin = adminService.admin(name);
-        return Result.success(admin);
-    }
 }

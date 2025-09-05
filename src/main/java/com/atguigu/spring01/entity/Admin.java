@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 public class Admin {
    private Integer id;
    private String username;
+   private String name;
    private String password;
    private String phone;
    private String email;

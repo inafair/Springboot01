@@ -50,6 +50,12 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>3.0.3</version> <!-- 使用 3.x 版本以支持 Spring Boot 3.x -->
         </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.4.6</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
