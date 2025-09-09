@@ -26,6 +26,10 @@ public class Result {
         return result;
     }
 
+    public static Result success(){
+        return success(null);
+    }
+
     /**
      * 错误返回结果的方法（重载）
      * @param msg 错误信息

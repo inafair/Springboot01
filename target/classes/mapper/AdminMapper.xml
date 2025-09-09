@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.atguigu.spring01.mapper.AdminMapper">
+
     <select id="selectAll" resultType="com.atguigu.spring01.entity.Admin">
         select * from `admin`
         <where>
@@ -8,9 +9,17 @@
             <if test="name != null"> name like concat('%',#{name},'%')</if>
             <if test="email != null"> email like concat('%',#{email},'%')</if>
         </where>
-                 order by id
+                 order by id asc
     </select>
     <select id="selectPage" resultType="com.atguigu.spring01.entity.Admin">
-
     </select>
+
+    <insert id="insert" >
+    insert into `admin` (username,password,name,phone,email) values (#{username},#{password},#{name},#{phone},#{email})
+    </insert>
+
+    <update id="updateById">
+        update admin set username=#{username},password=#{password},name=#{name},phone=#{phone},email=#{email} where id=#{id}
+    </update>
 </mapper>
+

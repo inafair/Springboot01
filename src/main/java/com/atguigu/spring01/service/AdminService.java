@@ -1,5 +1,6 @@
 package com.atguigu.spring01.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.atguigu.spring01.entity.Admin;
 import com.atguigu.spring01.exception.CustomException;
 import com.atguigu.spring01.mapper.AdminMapper;
@@ -52,5 +53,34 @@ public class AdminService{
         List<Admin> list = adminMapper.selectAll(admin);
     // 将查询结果列表转换为PageInfo对象并返回
         return PageInfo.of(list);
+    }
+
+    public void add(Admin admin) {
+        //根据新的账号查询数据库，是否存在同样的账号
+        Admin dbAdmin1 = adminMapper.selectByUsername(admin.getUsername());
+        if(dbAdmin1 != null){
+            throw new CustomException("账号已存在");
+        }
+        //默认密码
+        if (StrUtil.isBlank(admin.getPassword()))
+        {
+            admin.setPassword("admin");
+        }
+        adminMapper.insert(admin);
+
+    }
+
+    public void update(Admin admin) {
+        adminMapper.updateById(admin);
+    }
+
+
+    public void deleteById(Integer id) {
+        adminMapper.deleteById(id);
+    }
+
+    public void deleteBatch(List<Admin> list) {
+        for (Admin admin : list)
+         deleteById(admin.getId());
     }
 }
