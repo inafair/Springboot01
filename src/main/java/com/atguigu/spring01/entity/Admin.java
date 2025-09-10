@@ -15,4 +15,8 @@ public class Admin {
    private String phone;
    private String email;
 
+   //非数据库字段
+   private String ids;
+   private String[] idsArr;
+
 }

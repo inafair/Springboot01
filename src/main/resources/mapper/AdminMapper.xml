@@ -5,9 +5,15 @@
     <select id="selectAll" resultType="com.atguigu.spring01.entity.Admin">
         select * from `admin`
         <where>
-            <if test="username != null"> username like concat('%',#{username},'%')</if>
-            <if test="name != null"> name like concat('%',#{name},'%')</if>
-            <if test="email != null"> email like concat('%',#{email},'%')</if>
+            <if test="username != null and username != ''" > username like concat('%',#{username},'%')</if>
+            <if test="name != null and username != ''"> and name like concat('%',#{name},'%')</if>
+            <if test="email != null and username != ''"> and email like concat('%',#{email},'%')</if>
+                 <if test="ids !=null and ids != ''">
+                     and id in
+                 <foreach collection="idsArr" item="id" open="(" separator="," close=")">
+                     #{id}
+                 </foreach>
+                 </if>
         </where>
                  order by id asc
     </select>

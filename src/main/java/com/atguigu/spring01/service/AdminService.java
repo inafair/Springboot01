@@ -35,9 +35,9 @@ public class AdminService{
  *
  * @return List<Admin> 返回包含所有管理员对象的列表，如果没有记录则返回空列表
  */
-    public List<Admin> selectAll(){
+    public List<Admin> selectAll(Admin admin ){
 
-        return adminMapper.selectAll(null);  // 调用adminMapper的selectAll方法获取所有管理员数据
+        return adminMapper.selectAll(admin);  // 调用adminMapper的selectAll方法获取所有管理员数据
     }
 
 /**

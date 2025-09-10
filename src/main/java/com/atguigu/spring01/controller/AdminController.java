@@ -1,14 +1,23 @@
 package com.atguigu.spring01.controller;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import com.atguigu.spring01.common.Result;
 import com.atguigu.spring01.entity.Admin;
 import com.atguigu.spring01.service.AdminService;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.crypto.dsig.keyinfo.KeyInfoFactory;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -40,9 +49,9 @@ public class AdminController {
         return Result.success();  // 返回成功操作的结果对象
     }
     @GetMapping("/selectAll")  // HTTP GET请求映射到"/selectAll"路径
-    public Result selectAll(){  // 定义一个返回Result类型的方法，无参数
+    public Result selectAll(Admin admin){  // 定义一个返回Result类型的方法，无参数
         // 调用服务层方法获取所有管理员列表
-        List<Admin> adminList= adminService.selectAll();  // 从adminService中获取所有管理员数据
+        List<Admin> adminList= adminService.selectAll(admin);  // 从adminService中获取所有管理员数据
         // 返回成功结果，包含管理员列表数据
         return Result.success(adminList);  // 使用Result.success()方法封装查询结果并返回
     }
@@ -73,5 +82,7 @@ public class AdminController {
         adminService.deleteBatch(list);
         return Result.success();
     }
+
+
 
 }
