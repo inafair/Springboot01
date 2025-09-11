@@ -73,10 +73,10 @@ public class FileController {
         InputStream inputStream = file.getInputStream();
         ExcelReader reader = ExcelUtil.getReader(inputStream);
         //设置中文表头
-        reader.addHeaderAlias("username", "账号");
-        reader.addHeaderAlias("name", "名称");
-        reader.addHeaderAlias("phone", "电话");
-        reader.addHeaderAlias("email", "邮箱");
+        reader.addHeaderAlias("账号", "username");
+        reader.addHeaderAlias("名称", "name");
+        reader.addHeaderAlias("电话", "phone");
+        reader.addHeaderAlias("邮箱", "email");
         List<Admin> admins = reader.readAll(Admin.class);
         //将数据写到数据库
         for(Admin admin:admins)
