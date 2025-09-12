@@ -14,6 +14,7 @@ public class Admin {
    private String password;
    private String phone;
    private String email;
+   private String role;
 
    //非数据库字段
    private String ids;

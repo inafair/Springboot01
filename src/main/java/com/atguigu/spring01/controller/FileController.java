@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
 public class FileController {
     @Autowired
     AdminService adminService;
@@ -35,55 +34,4 @@ public class FileController {
      * @param resp HttpServletResponse对象，用于响应下载请求
      * @throws Exception 可能抛出的异常
      */
-    @GetMapping("/export") // HTTP GET请求映射到/export路径
-    public void exportData(Admin admin, HttpServletResponse resp) throws Exception {
-        String ids = admin.getIds();
-        if (StrUtil.isNotBlank(ids)) {
-            String[] idsArr = ids.split(",");
-            admin.setIdsArr(idsArr);
-        }
-        //拿到所有数据
-        List<Admin> list = adminService.selectAll(admin);
-        //构建writter对象
-        ExcelWriter writer = ExcelUtil.getWriter(true);
-        //设置中文表头
-        writer.addHeaderAlias("username", "账号");
-        writer.addHeaderAlias("name", "名称");
-        writer.addHeaderAlias("phone", "电话");
-        writer.addHeaderAlias("email", "邮箱");
-
-        writer.setOnlyAlias(true);
-
-        writer.write(list);
-        resp.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
-        String fileName = URLEncoder.encode("管理员信息", StandardCharsets.UTF_8);
-        resp.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
-
-        //写出到输出流，并关闭writer
-        ServletOutputStream os = resp.getOutputStream();
-        writer.flush(os);
-        writer.close();
-        os.close();
-    }
-
-    //文件的导入
-    @PostMapping("/import")
-    public Result importData(MultipartFile file) throws Exception {
-        //拿到输入流
-        InputStream inputStream = file.getInputStream();
-        ExcelReader reader = ExcelUtil.getReader(inputStream);
-        //设置中文表头
-        reader.addHeaderAlias("账号", "username");
-        reader.addHeaderAlias("名称", "name");
-        reader.addHeaderAlias("电话", "phone");
-        reader.addHeaderAlias("邮箱", "email");
-        List<Admin> admins = reader.readAll(Admin.class);
-        //将数据写到数据库
-        for(Admin admin:admins)
-        {
-            adminService.add(admin);
-        }
-        return Result.success();
-
-    }
 }
