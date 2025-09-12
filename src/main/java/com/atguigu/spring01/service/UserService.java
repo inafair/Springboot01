@@ -66,6 +66,7 @@ public class UserService {
         {
             user.setPassword("user");
         }
+        user.setRole("USER");
         userMapper.insert(user);
 
     }

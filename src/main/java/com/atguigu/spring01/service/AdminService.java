@@ -67,6 +67,7 @@ public class AdminService{
         {
             admin.setPassword("admin");
         }
+        admin.setRole("ADMIN");
         adminMapper.insert(admin);
 
     }
