@@ -5,6 +5,7 @@ import com.atguigu.spring01.entity.Account;
 import com.atguigu.spring01.entity.Admin;
 import com.atguigu.spring01.exception.CustomException;
 import com.atguigu.spring01.mapper.AdminMapper;
+import com.atguigu.spring01.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
@@ -97,6 +98,12 @@ public class AdminService{
         if (!dbadmin.getPassword().equals(account.getPassword())){
             throw new CustomException("账号或者密码错误");
         }
+        String token = TokenUtils.createToken(dbadmin.getId() + "-" + "ADMIN", dbadmin.getPassword());
+        dbadmin.setToken(token);
         return dbadmin;
+    }
+
+    public Admin selectById(String userId) {
+       return adminMapper.selectById(userId);
     }
 }

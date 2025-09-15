@@ -5,6 +5,7 @@ import com.atguigu.spring01.entity.Account;
 import com.atguigu.spring01.entity.User;
 import com.atguigu.spring01.exception.CustomException;
 import com.atguigu.spring01.mapper.UserMapper;
+import com.atguigu.spring01.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,10 +97,17 @@ public class UserService {
         if (!dbuser.getPassword().equals(account.getPassword())){
             throw new CustomException("账号或者密码错误");
         }
+        //创建token返回给前端
+        String token = TokenUtils.createToken(dbuser.getId()+"-"+"USER",dbuser.getPassword());
+        dbuser.setToken(token);
         return dbuser;
     }
 
     public void register(User user) {
         this.add(user);
+    }
+
+    public User selectById(String userId) {
+        return userMapper.selectById(userId);
     }
 }

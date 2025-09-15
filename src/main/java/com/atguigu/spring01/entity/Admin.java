@@ -15,6 +15,8 @@ public class Admin extends Account {
    private String phone;
    private String email;
    private String role;
+   private String token;
+
 
    //非数据库字段
    private String ids;

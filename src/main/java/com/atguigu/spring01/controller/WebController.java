@@ -4,6 +4,7 @@ import com.atguigu.spring01.common.Result;
 import com.atguigu.spring01.entity.Account;
 import com.atguigu.spring01.entity.Admin;
 import com.atguigu.spring01.entity.User;
+import com.atguigu.spring01.exception.CustomException;
 import com.atguigu.spring01.service.AdminService;
 import com.atguigu.spring01.service.UserService;
 import jakarta.annotation.Resource;
@@ -43,6 +44,9 @@ public class WebController {
         else if("USER".equals(account.getRole()))
         {
             dbAccount = userService.login(account);
+        }
+        else{
+            throw new CustomException("非法请求");
         }
         return Result.success(dbAccount);
     }
