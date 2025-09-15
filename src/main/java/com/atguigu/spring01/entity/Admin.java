@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
  * 管理员信息实体类
  */
 @Data
-public class Admin {
+public class Admin extends Account {
    private Integer id;
    private String username;
    private String name;

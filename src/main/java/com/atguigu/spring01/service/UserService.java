@@ -1,6 +1,7 @@
 package com.atguigu.spring01.service;
 
 import cn.hutool.core.util.StrUtil;
+import com.atguigu.spring01.entity.Account;
 import com.atguigu.spring01.entity.User;
 import com.atguigu.spring01.exception.CustomException;
 import com.atguigu.spring01.mapper.UserMapper;
@@ -85,16 +86,20 @@ public class UserService {
          deleteById(user.getId());
     }
 
-    public User login (User user) {
+    public User login (Account account) {
         //验证账号是否存在
-        User dbuser = userMapper.selectByUsername(user.getUsername());
+        User dbuser = userMapper.selectByUsername(account.getUsername());
         if (dbuser == null){
             throw new CustomException("账号不存在");
         }
         //验证密码是否正确
-        if (!dbuser.getPassword().equals(user.getPassword())){
+        if (!dbuser.getPassword().equals(account.getPassword())){
             throw new CustomException("账号或者密码错误");
         }
         return dbuser;
+    }
+
+    public void register(User user) {
+        this.add(user);
     }
 }

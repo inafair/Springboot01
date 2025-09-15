@@ -3,7 +3,7 @@ package com.atguigu.spring01.entity;
 import lombok.Data;
 
 @Data
-public class User extends Account {
+public class Account {
     private Integer id;
     private String username;
     private String name;

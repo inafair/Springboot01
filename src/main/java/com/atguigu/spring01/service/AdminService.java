@@ -1,6 +1,7 @@
 package com.atguigu.spring01.service;
 
 import cn.hutool.core.util.StrUtil;
+import com.atguigu.spring01.entity.Account;
 import com.atguigu.spring01.entity.Admin;
 import com.atguigu.spring01.exception.CustomException;
 import com.atguigu.spring01.mapper.AdminMapper;
@@ -86,14 +87,14 @@ public class AdminService{
          deleteById(admin.getId());
     }
 
-    public Admin login (Admin admin) {
+    public Admin login (Account account) {
         //验证账号是否存在
-        Admin dbadmin = adminMapper.selectByUsername(admin.getUsername());
+        Admin dbadmin = adminMapper.selectByUsername(account.getUsername());
         if (dbadmin == null){
             throw new CustomException("账号不存在");
         }
         //验证密码是否正确
-        if (!dbadmin.getPassword().equals(admin.getPassword())){
+        if (!dbadmin.getPassword().equals(account.getPassword())){
             throw new CustomException("账号或者密码错误");
         }
         return dbadmin;
