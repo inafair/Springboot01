@@ -55,6 +55,7 @@ public class JWTInterceptor implements HandlerInterceptor {
             String[] split = audience.split("-"); // 按照分隔符"-"拆分audience字符串
             String userId = split[0]; // 获取用户ID
             String role = split[1]; // 获取用户角色
+            // 根据用户角色查询对应的账户信息
             if ("ADMIN".equals(role)) // 判断用户角色是否为管理员
             {
                 account = adminService.selectById(userId); // 根据用户ID查询管理员信息
