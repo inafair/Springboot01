@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
         // 排除登录和注册路径，允许这些路径无需JWT验证即可访问
         registry.addInterceptor(jwtInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login","/register");
+                .excludePathPatterns("/login","/register","/files/download");
     }
 
     /**

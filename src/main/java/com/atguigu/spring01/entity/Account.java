@@ -12,6 +12,7 @@ public class Account {
     private String email;
     private String role;
     private String token;
+    private String avatar;
 
     //非数据库字段
     private String ids;
