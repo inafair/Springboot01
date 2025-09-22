@@ -98,6 +98,8 @@ public class UserController {
         writer.addHeaderAlias("name", "名称");
         writer.addHeaderAlias("phone", "电话");
         writer.addHeaderAlias("email", "邮箱");
+        writer.addHeaderAlias("avatar", "头像");
+
 
         writer.setOnlyAlias(true);
 
@@ -124,6 +126,8 @@ public class UserController {
         reader.addHeaderAlias("名称", "name");
         reader.addHeaderAlias("电话", "phone");
         reader.addHeaderAlias("邮箱", "email");
+        reader.addHeaderAlias("头像", "avatar");
+
         List<User> users = reader.readAll(User.class);
         //将数据写到数据库
         for(User user:users)

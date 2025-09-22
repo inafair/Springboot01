@@ -35,7 +35,5 @@ public class CustomException extends RuntimeException {
     /**
      * 构造方法3：无参构造方法
      */
-    public CustomException(){
-
-    }
+    public CustomException(){}
 }
