@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.atguigu.spring01.entity.Account;
 import com.atguigu.spring01.entity.User;
 import com.atguigu.spring01.exception.CustomException;
+import com.atguigu.spring01.mapper.AdminMapper;
 import com.atguigu.spring01.mapper.UserMapper;
 import com.atguigu.spring01.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
@@ -21,6 +22,9 @@ import java.util.List;
 public class UserService {
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    private AdminMapper adminMapper;
+
     public String user(String name){
         if ("user".equals(name)){
             return "user";
@@ -109,5 +113,22 @@ public class UserService {
 
     public User selectById(String userId) {
         return userMapper.selectById(userId);
+    }
+
+    public void updatePassword(Account account) {
+        if (!account.getNewPassword().equals(account.getNew2Password()))
+        {
+            throw new CustomException("500","两次密码不一致");
+        }
+        //校验一下原密码是否正确
+        Account currentAccount =TokenUtils.getCurrentUser();
+        if(!account.getPassword().equals(currentAccount.getPassword()))
+        {
+            throw new CustomException("500","原密码不正确");
+        }
+        //开始更新密码
+        User user = userMapper.selectById(currentAccount.getId().toString());
+        user.setPassword(account.getNewPassword());
+        userMapper.updateById(user);
     }
 }

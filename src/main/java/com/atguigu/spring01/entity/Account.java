@@ -13,6 +13,9 @@ public class Account {
     private String role;
     private String token;
     private String avatar;
+    private String newPassword;
+    private String new2Password;
+
 
     //非数据库字段
     private String ids;

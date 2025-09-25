@@ -3,6 +3,7 @@ package com.atguigu.spring01.service;
 import cn.hutool.core.util.StrUtil;
 import com.atguigu.spring01.entity.Account;
 import com.atguigu.spring01.entity.Admin;
+import com.atguigu.spring01.entity.User;
 import com.atguigu.spring01.exception.CustomException;
 import com.atguigu.spring01.mapper.AdminMapper;
 import com.atguigu.spring01.utils.TokenUtils;
@@ -105,5 +106,22 @@ public class AdminService{
 
     public Admin selectById(String userId) {
        return adminMapper.selectById(userId);
+    }
+
+    public void updatePassword(Account account) {
+        if (!account.getNewPassword().equals(account.getNew2Password()))
+        {
+            throw new CustomException("500","两次密码不一致");
+        }
+        //校验一下原密码是否正确
+        Account currentAccount =TokenUtils.getCurrentUser();
+        if(!account.getPassword().equals(currentAccount.getPassword()))
+        {
+            throw new CustomException("500","原密码不正确");
+        }
+        //开始更新密码
+        Admin admin = adminMapper.selectById(currentAccount.getId().toString());
+        admin.setPassword(account.getNewPassword());
+        adminMapper.updateById(admin);
     }
 }
