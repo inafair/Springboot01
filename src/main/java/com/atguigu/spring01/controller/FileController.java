@@ -1,70 +1,56 @@
-//package com.atguigu.spring01.controller;
-//
-//import cn.hutool.core.io.FileUtil;
-//import cn.hutool.core.util.StrUtil;
-//import cn.hutool.poi.excel.ExcelReader;
-//import cn.hutool.poi.excel.ExcelUtil;
-//import cn.hutool.poi.excel.ExcelWriter;
-//import com.atguigu.spring01.common.Result;
-//import com.atguigu.spring01.entity.Admin;
-//import com.atguigu.spring01.exception.CustomException;
-//import com.atguigu.spring01.service.AdminService;
-//import jakarta.servlet.ServletOutputStream;
-//import jakarta.servlet.http.HttpServletResponse;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.multipart.MultipartFile;
-//
-//import java.io.IOException;
-//import java.io.InputStream;
-//import java.net.URLEncoder;
-//import java.nio.charset.StandardCharsets;
-//import java.util.List;
-//
-///**
-// * 处理文件上传下载的相关接口
-// */
-//@RestController
-//@RequestMapping("/files")
-//public class FileController {
-//    /**
-//     * 文件下载接口
-//     * 根据文件名下载指定文件
-//     *
-//     * @param fileName 文件名
-//     * @param response HTTP响应对象
-//     * @throws Exception 可能抛出的异常
-//     */
-//    @GetMapping("/download/{fileName}")  // HTTP GET请求映射，用于处理文件下载请求
-//    public void download(@PathVariable String fileName, HttpServletResponse response) throws Exception {  // 方法定义，接收文件名和HTTP响应对象作为参数
-//        String filePath = System.getProperty("user.dir") + "/files/";//获得项目的根路径
-//        String realPath = filePath + fileName;
-//        boolean exist = FileUtil.exist(realPath);
-//        if (!exist) {
-//            throw new CustomException("文件不存在");
-//        }
-//        //读取文件的字节流
-//        byte[] bytes = FileUtil.readBytes(realPath);
-//        ServletOutputStream os = response.getOutputStream();
-//        os.write(bytes);
-//        os.flush();
-//        os.close();
-//    }
-//
-//    @PostMapping("/upload")
-//    public Result upload(@RequestParam("file") MultipartFile file) throws Exception {
-//        String filePath = System.getProperty("user.dir") + "/files/";//获得项目的根路径
-//        if (!FileUtil.isDirectory(filePath)) {
-//            FileUtil.mkdir(filePath);
-//        }
-//        byte[] bytes = file.getBytes();
-//        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();//文件原始名称
-//
-//        //写入文件
-//        FileUtil.writeBytes(bytes, filePath + fileName);
-//
-//        String url = "http://localhost:9090/files/download/" + fileName;
-//        return Result.success(url);
-//    }
-//
-//}
+package com.atguigu.spring01.controller;
+
+import cn.hutool.core.io.FileUtil;
+import com.atguigu.spring01.common.Result;
+import com.atguigu.spring01.exception.CustomException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
+@RestController
+@RequestMapping("/files")
+public class FileController {
+    public static final String filePath = System.getProperty("user.dir") + "/files/";
+    @GetMapping("/download/{fileName}")
+    public void  download(@PathVariable String fileName, HttpServletResponse  response)throws  Exception{
+        //获取文件位置
+        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+        response.setContentType("application/octet-stream");
+        String realPath =  filePath + fileName;
+        boolean exist = FileUtil.exist(realPath);
+        if(!exist){
+            FileUtil.mkdir(filePath);
+        }
+        byte[] bytes = FileUtil.readBytes(realPath);
+        OutputStream os = response.getOutputStream();
+        os.write(bytes);
+        os.flush();
+        os.close();
+    }
+
+
+    @PostMapping("/upload")
+    public Result upload(MultipartFile  file) throws Exception {
+        String originalFilename = file.getOriginalFilename();
+        if (!FileUtil.isDirectory(filePath)) {
+            FileUtil.mkdir(filePath);
+        }
+        String fileName = System.currentTimeMillis()+"_"+ originalFilename ;
+        String realPath = filePath + fileName;
+        try {
+            FileUtil.writeBytes(file.getBytes(),realPath);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new CustomException("文件上传失败");
+        }
+
+        String url = "http://localhost:9090/files/download/" + fileName;
+        return Result.success(url);
+    }
+}
