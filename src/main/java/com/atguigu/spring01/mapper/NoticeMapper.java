@@ -12,7 +12,7 @@ public interface NoticeMapper {
 
     void updateById(Notice notice);
 
-    @Delete("delete from `notice`where id=#{id}")
+    @Delete("delete from `notice` where id=#{id}")
     void deleteById(Integer id);
 
 }
