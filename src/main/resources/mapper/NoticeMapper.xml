@@ -9,9 +9,6 @@
         </where>
         order by id asc
     </select>
-    <select id="selectPage" resultType="com.atguigu.spring01.entity.Admin">
-    </select>
-
     <insert id="insert" >
         insert into `notice` (title,content,time)
         values (#{title},#{content},#{time})

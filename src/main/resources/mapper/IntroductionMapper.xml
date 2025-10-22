@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.atguigu.spring01.mapper.IntroductionMapper">
+
+    <select id="selectAll" resultType="com.atguigu.spring01.entity.Introduction">
+        select * from `introduction`
+        <where>
+            <if test="title != null and title != ''"> and title like concat('%',#{title},'%')</if>
+        </where>
+        order by id asc
+    </select>
+    <select id="selectPage" resultType="com.atguigu.spring01.entity.User">
+    </select>
+
+    <insert id="insert" >
+        insert into `introduction` (title,content,time,img)
+        values (#{title},#{content},#{time},#{img})
+    </insert>
+
+    <update id="updateById">
+        update introduction set title=#{title},content=#{content},time=#{time},img= #{img}
+                      where id=#{id}
+    </update>
+</mapper>
+
