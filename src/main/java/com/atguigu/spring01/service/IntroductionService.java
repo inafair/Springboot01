@@ -1,13 +1,19 @@
 package com.atguigu.spring01.service;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.atguigu.spring01.entity.Account;
+import com.atguigu.spring01.entity.Category;
 import com.atguigu.spring01.entity.Introduction;
+import com.atguigu.spring01.entity.User;
 import com.atguigu.spring01.exception.CustomException;
+import com.atguigu.spring01.mapper.CategoryMapper;
 import com.atguigu.spring01.mapper.IntroductionMapper;
+import com.atguigu.spring01.mapper.UserMapper;
 import com.atguigu.spring01.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +23,11 @@ import java.util.List;
 public class IntroductionService {
     @Autowired
     IntroductionMapper introductionMapper;
+    @Resource
+    CategoryMapper categoryMapper;
 
+    @Resource
+    UserMapper userMapper;
     public String introduction(String name) {
         if ("introduction".equals(name)) {
             return "introduction";
@@ -49,15 +59,30 @@ public class IntroductionService {
         PageHelper.startPage(pageNum, pageSize);
         // 查询所有管理员信息
         List<Introduction> list = introductionMapper.selectAll(introduction);
-        // 将查询结果列表转换为PageInfo对象并返回
+    // 遍历查询结果列表
+        for(Introduction dbIntroduction : list){
+        // 获取每个管理员记录的分类ID
+            int categoryId = dbIntroduction.getCategoryId();
+        // 根据分类ID查询分类信息
+           Category category = categoryMapper.selectById(categoryId);
+            Integer userId = dbIntroduction.getUserId();
+            User user = userMapper.selectById(userId.toString());
+        // 如果查询到的分类信息不为空，则设置分类标题
+           if (ObjectUtil.isNotEmpty(category))
+           {
+               dbIntroduction.setCategoryTitle(category.getTitle());
+           }
+            if (ObjectUtil.isNotEmpty(user)){
+                dbIntroduction.setUserName(user.getName());
+            }
+        }
+        // 将查询结果列表转换为PageInfo对象并返回，该对象包含分页信息和数据列表
         return PageInfo.of(list);
     }
 
     public void add(Introduction introduction) {
         Account account = TokenUtils.getCurrentUser();
-        if ("USER".equals(account.getRole())) {
-            throw new CustomException("500","您的角色无权限该操作");
-        }
+        introduction.setUserId(account.getId());
         introduction.setTime(DateUtil.now());
         introductionMapper.insert(introduction);
 
@@ -70,5 +95,6 @@ public class IntroductionService {
 
     public void deleteById(Integer id) {
         introductionMapper.deleteById(id);
+
     }
 }

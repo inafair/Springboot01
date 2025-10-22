@@ -10,12 +10,12 @@
         order by id asc
     </select>
     <insert id="insert" >
-        insert into `notice` (title,content,time)
-        values (#{title},#{content},#{time})
+        insert into `notice` (title,content,time,user_id)
+        values (#{title},#{content},#{time},#{userId}
     </insert>
 
     <update id="updateById">
-        update notice set title=#{title},content=#{content},time=#{time}
+        update notice set title=#{title},content=#{content},time=#{time},user_id=#{userId}
                       where id=#{id}
     </update>
 </mapper>

@@ -13,12 +13,12 @@
     </select>
 
     <insert id="insert" >
-        insert into `introduction` (title,content,time,img)
-        values (#{title},#{content},#{time},#{img})
+        insert into `introduction` (title,content,time,img,category_id,user_id)
+        values (#{title},#{content},#{time},#{img},#{categoryId},{userId})
     </insert>
 
     <update id="updateById">
-        update introduction set title=#{title},content=#{content},time=#{time},img= #{img}
+        update introduction set title=#{title},content=#{content},time=#{time},img= #{img},category_id=#{categoryId},user_id= #{userId}
                       where id=#{id}
     </update>
 </mapper>

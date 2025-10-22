@@ -1,13 +1,17 @@
 package com.atguigu.spring01.service;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.atguigu.spring01.entity.Account;
 import com.atguigu.spring01.entity.Notice;
+import com.atguigu.spring01.entity.User;
 import com.atguigu.spring01.exception.CustomException;
 import com.atguigu.spring01.mapper.NoticeMapper;
+import com.atguigu.spring01.mapper.UserMapper;
 import com.atguigu.spring01.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +20,11 @@ import java.util.List;
 @Service
 public class NoticeService {
     @Autowired
-    NoticeMapper noticeMapper;  // 自动注入NoticeMapper接口，用于数据库操作
+    NoticeMapper noticeMapper;
 
+    @Resource
+    UserMapper userMapper;
+    // 自动注入NoticeMapper接口，用于数据库操作
     /**
      * 根据名称查询通知的方法
      * @param name 要查询的通知名称
@@ -57,6 +64,13 @@ public class NoticeService {
         PageHelper.startPage(pageNum, pageSize);
         // 查询所有管理员信息
         List<Notice> list = noticeMapper.selectAll(notice);
+        for(Notice dbnotice :list){
+            Integer userId = dbnotice.getUserId();
+            User user = userMapper.selectById(userId.toString());
+            if (ObjectUtil.isNotEmpty(user)){
+                dbnotice.setUserName(user.getName());
+            }
+        }
         // 将查询结果列表转换为PageInfo对象并返回
         return PageInfo.of(list);
     }

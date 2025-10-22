@@ -11,4 +11,8 @@ public class Notice {
     private String title;
     private String content;
     private String time;
+    private Integer userId;
+    //非数据库字段
+    private String userName;
+
 }

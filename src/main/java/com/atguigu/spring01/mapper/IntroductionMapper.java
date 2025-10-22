@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Delete;
 import java.util.List;
 
 public interface IntroductionMapper {
+    
     List<Introduction> selectAll(Introduction introduction);
 
     void insert(Introduction introduction);
