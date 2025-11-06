@@ -14,7 +14,7 @@
 
     <insert id="insert" >
         insert into `introduction` (title,content,time,img,category_id,user_id)
-        values (#{title},#{content},#{time},#{img},#{categoryId},{userId})
+        values (#{title},#{content},#{time},#{img},#{categoryId},#{userId})
     </insert>
 
     <update id="updateById">
