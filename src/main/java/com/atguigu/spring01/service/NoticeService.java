@@ -95,6 +95,11 @@ public class NoticeService {
      * @param notice 包含更新信息的通知对象
      */
     public void update(Notice notice) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if ("USER".equals(currentUser.getRole())) {
+            throw new CustomException("500","您的角色无权限该操作");
+        }
+        notice.setTime(DateUtil.now());  // 设置通知时间为当前时间
         noticeMapper.updateById(notice);  // 调用noticeMapper的updateById方法更新通知信息
     }
 

@@ -24,15 +24,13 @@ public class FileController {
     @GetMapping("/download/{fileName}")
     public void  download(@PathVariable String fileName, HttpServletResponse  response)throws  Exception{
         //获取文件位置
-        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
-        response.setContentType("application/octet-stream");
         String realPath = filePath + fileName;
         boolean exist = FileUtil.exist(realPath);
         if(!exist){
-            FileUtil.mkdir(filePath);
+            throw new CustomException("文件不存在");
         }
         byte[] bytes = FileUtil.readBytes(realPath);
-        OutputStream os = response.getOutputStream();
+        ServletOutputStream os = response.getOutputStream();
         os.write(bytes);
         os.flush();
         os.close();
@@ -40,7 +38,7 @@ public class FileController {
 
 
     @PostMapping("/upload")
-    public Result upload(MultipartFile  file) throws Exception {
+    public Result upload(@RequestParam("file")  MultipartFile  file) throws Exception {
         String originalFilename = file.getOriginalFilename();
         if (!FileUtil.isDirectory(filePath)) {
             FileUtil.mkdir(filePath);
