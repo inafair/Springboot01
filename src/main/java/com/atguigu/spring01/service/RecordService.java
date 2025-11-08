@@ -1,9 +1,15 @@
 package com.atguigu.spring01.service;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.atguigu.spring01.entity.Account;
+import com.atguigu.spring01.entity.Book;
 import com.atguigu.spring01.entity.Record;
 import com.atguigu.spring01.exception.CustomException;
+import com.atguigu.spring01.mapper.BookMapper;
 import com.atguigu.spring01.mapper.RecordMapper;
 import com.atguigu.spring01.mapper.UserMapper;
+import com.atguigu.spring01.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
@@ -19,6 +25,8 @@ public class RecordService {
 
     @Resource
     UserMapper userMapper;
+    @Autowired
+    private BookMapper bookMapper;
     // 自动注入RecordMapper接口，用于数据库操作
     /**
      * 根据名称查询通知的方法
@@ -55,6 +63,10 @@ public class RecordService {
      * @return PageInfo<Record> 分页结果对象，包含分页信息和数据列表
      */
     public PageInfo<Record> selectPage(Integer pageNum, Integer pageSize, Record record) {
+        Account account = TokenUtils.getCurrentUser();
+        if("USER".equals(account.getRole())){
+            record.setUserId(account.getId());
+        }
         // 使用PageHelper开始分页，设置当前页码和每页显示数量
         PageHelper.startPage(pageNum, pageSize);
         // 查询所有管理员信息
@@ -69,8 +81,20 @@ public class RecordService {
      * @throws CustomException 当当前用户角色为"USER"时抛出异常，表示无权限操作
      */
     public void add(Record record) {
+        record.setStatus("待审核");
+        record.setTime(DateUtil.now());// 添加时间
         recordMapper.insert(record);  // 调用recordMapper的insert方法将通知信息插入数据库
 
+        //图书数量-1
+        Book book = bookMapper.selectById(record.getBookId());
+        // 判断图书数量是否大于0
+        if (book.getNum() <= 0) {
+            throw new CustomException("图书库存不足，无法借阅");
+        }
+        if (ObjectUtil.isNotEmpty(book)) {
+            book.setNum(book.getNum() - 1);
+            bookMapper.updateById(book);
+        }
     }
 
     /**
@@ -78,6 +102,15 @@ public class RecordService {
      * @param record 包含更新信息的通知对象
      */
     public void update(Record record) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if("ADMIN".equals(currentUser.getRole()) && "审核拒绝".equals(record.getStatus())){
+            Book book = bookMapper.selectById(record.getBookId());
+            if (ObjectUtil.isNotEmpty(book)) {
+                book.setNum(book.getNum() + 1);
+                bookMapper.updateById(book);
+            }
+
+        }
         recordMapper.updateById(record);  // 调用recordMapper的updateById方法更新通知信息
     }
 

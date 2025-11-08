@@ -10,4 +10,9 @@ public class Record {
     private String time;
     private String status;
     private String reason;
+
+    private String bookName;
+    private String userName;
+    private String bookAuthor;
+    private String bookImg;
 }

@@ -20,5 +20,5 @@ public interface BookMapper {
     void deleteById(Integer id);
 
     @Select("select * from `book` where id=#{id}")
-    Book selectById(String userId);
+    Book selectById(Integer id);
 }

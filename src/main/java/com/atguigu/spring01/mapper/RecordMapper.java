@@ -20,5 +20,5 @@ public interface RecordMapper {
     void deleteById(Integer id);
 
     @Select("select * from `record` where id=#{id}")
-    Record selectById(String userId);
+    Record selectById(Integer Id);
 }
